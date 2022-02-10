@@ -22,10 +22,10 @@ app.post("/create", (req, res) => {
   const prenom = req.body.prenom;
   const nom = req.body.nom;
   const pseudo = req.body.pseudo;
-
+  const id = req.body.id;
   db.query(
-    "INSERT INTO users (prenom,nom,pseudo) VALUES (?,?,?)",
-    [prenom, nom, pseudo],
+    "INSERT INTO users (id,prenom,nom,pseudo) VALUES (?,?,?,?)",
+    [id, prenom, nom, pseudo],
     (err, result) => {
       if (err) {
         console.log(err);
