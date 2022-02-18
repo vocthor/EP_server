@@ -16,6 +16,5 @@
     "mysql": "^2.18.1",
     "nodemon": "^2.0.15",
     "request": "^2.88.2",
-    "requet": "^0.0.1-security"
   }
 }
