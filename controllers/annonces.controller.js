@@ -6,22 +6,32 @@ const { sign } = require("jsonwebtoken");
 const db = mysql.createConnection(config.databaseOptions);
 
 module.exports.addAnnonce = (req, res) => {
-  const prenom = req.body.prenom;
-  const nom = req.body.nom;
-  const pseudo = req.body.pseudo;
-  if (prenom == "" || nom == "" || pseudo == "") {
+  const id_annonce = req.body.id_annonce;
+  const id_owner = req.body.id_owner;
+  const text = req.body.text;
+  const contact = req.body.contact;
+
+  if (id_annonce == "" || id_owner == "" || text == "") {
     res.send("Invalid fields");
   } else {
     db.query(
       "INSERT INTO annonces (id_annonce, id_owner, annonce, contact) VALUES (?,?,?,?)",
-      [prenom, nom, pseudo],
+      [id_annonce, id_owner, text, contact],
       (err, result) => {
         if (err) {
           console.log(err);
+          res.send("Error during insertion");
         } else {
           res.send("Values inserted");
         }
       }
     );
   }
+};
+
+module.exports.updateAnnonces = (req, res) => {
+  db.query("SELECT * FROM annonces",[], (err, result) => {
+    // console.log(result);
+    res.send(result);
+  });
 };
