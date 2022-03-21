@@ -26,6 +26,7 @@ async function processLineByLine() {
       reg1 = RegExp.$1;
       if (reg1 == "DTSTART") cours[i].dtstart = RegExp.$3;
       if (reg1 == "DTEND") cours[i].dtend = RegExp.$3;
+      if (reg1 == "SUMMARY") cours[i].summary = RegExp.$3;
       if (reg1 == "LOCATION") {
         cours[i].location = RegExp.$3;
       }
@@ -43,6 +44,7 @@ async function processLineByLine() {
         ajout = new Object();
         ajout.dtend = element.dtend;
         ajout.dtstart = element.dtstart;
+        ajout.summary = element.summary;
         ajout.location = RegExp.$2;
         cours.push(ajout);
       }
@@ -56,6 +58,7 @@ async function processLineByLine() {
         ajout = new Object();
         ajout.dtend = element.dtend;
         ajout.dtstart = element.dtstart;
+        ajout.summary = element.summary;
         ajout.location = RegExp.$2;
         cours.push(ajout);
       }
@@ -69,6 +72,7 @@ async function processLineByLine() {
         ajout = new Object();
         ajout.dtend = element.dtend;
         ajout.dtstart = element.dtstart;
+        ajout.summary = element.summary;
         ajout.location = RegExp.$2;
         cours.push(ajout);
       }
@@ -82,6 +86,7 @@ async function processLineByLine() {
         ajout = new Object();
         ajout.dtend = element.dtend;
         ajout.dtstart = element.dtstart;
+        ajout.summary = element.summary;
         ajout.location = RegExp.$2;
         cours.push(ajout);
       }
