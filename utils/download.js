@@ -26,7 +26,7 @@ module.exports = function download(url, dest, cb) {
     cb(err.message);
   });
 
-  // écrit directement le fichier téléchargé.
+  // écrit directement le fichier téléchargé
   sendReq.pipe(file);
 
   // lorsque le téléchargement est terminé
