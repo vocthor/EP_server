@@ -4,16 +4,18 @@ const mysql = require("mysql");
 const cors = require("cors");
 const { sign } = require("jsonwebtoken");
 const { validateToken } = require("./middlewares/AuthMiddleware");
-
+const Joi = require("joi");
+const helmet = require("helmet");
 app.use(cors());
 app.use(express.json());
+app.use(helmet());
 
 /* Crée la connection à la BD */
 const db = mysql.createConnection({
   user: "root",
   host: "localhost",
   password: "password",
-  database: "users",
+  database: "etude_pratique_3A",
 });
 
 /* Fonction qui permets d'insérer un utilisateur dans la BD à partir de données reçues du front,
@@ -22,7 +24,7 @@ app.post("/create", (req, res) => {
   const prenom = req.body.prenom;
   const nom = req.body.nom;
   const pseudo = req.body.pseudo;
-
+  console.log(schema.validate({ prenom: prenom, nom: nom, pseudo: pseudo }));
   db.query(
     "INSERT INTO users (prenom,nom,pseudo) VALUES (?,?,?)",
     [prenom, nom, pseudo],
