@@ -8,6 +8,8 @@ router.post("/modifPrenom", authController.modifPrenom);
 router.post("/modifNom", authController.modifNom);
 router.post("/modifPseudo", authController.modifPseudo);
 router.post("/modifEmail", authController.modifEmail);
+router.post("/modifRole", authController.modifRole);
+router.post("/getUsersList", authController.getUsersList);
 
 /* Fonction qui permets de recup les données associées à un token d'user
 appelée avec /getUserData     */
