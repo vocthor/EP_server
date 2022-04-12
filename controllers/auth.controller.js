@@ -33,6 +33,7 @@ module.exports.createUser = (req, res) => {
   const pseudo = req.body.pseudo;
   const id = req.body.id;
   const email = req.body.email;
+  const role = "user";
   if (prenom == "" || nom == "" || pseudo == "") {
     //vérification que les champs ne soient pas vide
     res.send("Invalid fields");
@@ -41,8 +42,8 @@ module.exports.createUser = (req, res) => {
     res.send("Invalid fields");
   } else {
     db.query(
-      "INSERT INTO users (id,prenom,nom,pseudo,email) VALUES (?,?,?,?,?)",
-      [id, prenom, nom, pseudo, email],
+      "INSERT INTO users (id,prenom,nom,pseudo,email,role) VALUES (?,?,?,?,?,?)",
+      [id, prenom, nom, pseudo, email, role],
       (err, result) => {
         if (err) {
           console.log(err);
@@ -234,6 +235,41 @@ module.exports.modifEmail = (req, res) => {
     );
   }
 };
+
+/* Fonction qui permets de modifier le rôle d'un utilisateur    */
+module.exports.modifRole = (req, res) => {
+  const role = req.body.role;
+  const id = req.body.id;
+  const email = req.body.email;
+  db.query(
+    "UPDATE users SET role='" + role + "' WHERE id='" + id + "'",
+    [true],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send("Values inserted");
+        //On prépare le mail de vérification
+        const mailOptions = {
+          from: process.env.GMAIL_USERNAME,
+          to: email,
+          subject: "Rôle modifié",
+          text:
+            "Bonjour,\nvous avez maintenant les privilèges associés au rôle " +
+            role,
+        };
+        //On envoie le mail
+        transporter.sendMail(mailOptions, function (error, info) {
+          if (error) {
+            console.log(error);
+          } else {
+            console.log("Email sent: " + info.response);
+          }
+        });
+      }
+    }
+  );
+};
 /* Fonction qui permets de vérifier si l'id reçu du front est bien présent dans la BD et si oui
 retourne un token qui va ensuite sur le front être stocké dans le session storage pour permettre
 l'authentification. Si l'id n'est pas présent retourne un objet avec un message d'erreur.
@@ -252,6 +288,7 @@ module.exports.getUser = (req, res) => {
             pseudo: result[0].pseudo,
             id: result[0].id,
             email: result[0].email,
+            role: result[0].role,
           },
           "secret message"
         );
@@ -261,6 +298,17 @@ module.exports.getUser = (req, res) => {
       } else {
         res.send({ error: "Id no present in the db" });
       }
+    }
+  });
+};
+/* Fonction qui permets de retourner la liste de tous les utilisateurs et de leurs infos
+appelée avec /getUser   */
+module.exports.getUsersList = (req, res) => {
+  db.query("SELECT * FROM users ", (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(result);
     }
   });
 };
