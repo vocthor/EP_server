@@ -22,7 +22,7 @@ module.exports.addAnnonce = (req, res) => {
     res.send("Invalid fields");
   } else {
     db.query(
-      "INSERT INTO annonces (id_annonce, id_owner, annonce, contact, anon, date) VALUES (?,?,?,?,?,?)",
+      "INSERT INTO annonces (id_annonce, id_owner, text_annonce, contact_annonce, anon, date_annonce) VALUES (?,?,?,?,?,?)",
       [id_annonce, id_owner, text, contact, anon, date],
       (err, result) => {
         if (err) {
@@ -65,21 +65,37 @@ module.exports.retrieveAnnonces = (req, res) => {
  */
 module.exports.deleteAnnonce = (req, res) => {
   const id_annonce = req.body.id_annonce;
-  const id_owner = req.body.id_owner;
+  const id_logged = req.body.id_logged;
+  const role = req.body.role;
   // On vérifie aussi côté backEnd
-  db.query(
-    "DELETE FROM annonces \
-    WHERE id_annonce= ? AND (id_owner = ? OR id_owner IN \
-      (SELECT id FROM users \
-      WHERE role='admin' OR role='moderator'))",
-    [id_annonce, id_owner],
-    (err, result) => {
-      if (err) {
-        console.log(err);
-        res.send("Error during delete");
-      } else {
-        res.send("Value deleted");
+  if (role == "admin" || role == "moderator") {
+    db.query(
+      "DELETE FROM annonces \
+      WHERE id_annonce= ?",
+      [id_annonce],
+      (err, result) => {
+        if (err) {
+          console.log(err);
+          res.send("Error during delete");
+        } else {
+          res.send("Value deleted");
+        }
       }
-    }
-  );
+    );
+  } else {
+    db.query(
+      "DELETE FROM annonces \
+    WHERE id_annonce= ? AND id_owner = ?",
+      [id_annonce, id_logged],
+      (err, result) => {
+        if (err) {
+          console.log(err);
+          res.send("Error during delete");
+        } else {
+          res.send("Value deleted");
+        }
+      }
+    );
+  }
+  // C'est moche mais tant pis
 };
