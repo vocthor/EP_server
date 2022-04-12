@@ -4,6 +4,10 @@ const { validateToken } = require("../middlewares/AuthMiddleware");
 
 router.post("/create", authController.createUser);
 router.post("/getUser", authController.getUser);
+router.post("/modifPrenom", authController.modifPrenom);
+router.post("/modifNom", authController.modifNom);
+router.post("/modifPseudo", authController.modifPseudo);
+router.post("/modifEmail", authController.modifEmail);
 
 /* Fonction qui permets de recup les données associées à un token d'user
 appelée avec /getUserData     */
