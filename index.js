@@ -6,10 +6,11 @@ const tpRoutes = require("./routes/tp.routes");
 const download = require("./utils/download");
 const app = express();
 const cors = require("cors");
+const helmet = require("helmet");
 
 app.use(cors());
 app.use(express.json());
-
+app.use(helmet());
 app.use("/", userRoutes);
 app.use("/", annoncesRoutes);
 app.use("/", tpRoutes);
