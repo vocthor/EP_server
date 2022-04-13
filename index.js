@@ -4,7 +4,6 @@ const mysql = require("mysql");
 const cors = require("cors");
 const { sign } = require("jsonwebtoken");
 const { validateToken } = require("./middlewares/AuthMiddleware");
-const Joi = require("joi");
 const helmet = require("helmet");
 app.use(cors());
 app.use(express.json());
