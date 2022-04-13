@@ -14,7 +14,7 @@ const db = mysql.createConnection({
   user: "root",
   host: "localhost",
   password: "password",
-  database: "etude_pratique_3A",
+  database: "users",
 });
 
 /* Fonction qui permets d'insérer un utilisateur dans la BD à partir de données reçues du front,
