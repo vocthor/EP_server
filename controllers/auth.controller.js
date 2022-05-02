@@ -84,8 +84,8 @@ module.exports.modifPrenom = (req, res) => {
     res.send("Invalid fields");
   } else {
     db.query(
-      "UPDATE users SET prenom='" + prenom + "' WHERE id='" + id + "'",
-      [true],
+      "UPDATE users SET prenom= ? WHERE id= ? ",
+      [prenom, id],
       (err, result) => {
         if (err) {
           console.log(err);
@@ -123,34 +123,29 @@ module.exports.modifNom = (req, res) => {
     //vérification que les champs ne soient pas vide
     res.send("Invalid fields");
   } else {
-    db.query(
-      "UPDATE users SET nom='" + nom + "' WHERE id='" + id + "'",
-      [true],
-      (err, result) => {
-        if (err) {
-          console.log(err);
-        } else {
-          res.send("Values inserted");
-          //On prépare le mail de vérification
-          const mailOptions = {
-            from: process.env.GMAIL_USERNAME,
-            to: email,
-            subject: "Nom modifié",
-            text:
-              "Bonjour,\nNous confirmons la modification de votre Nom par " +
-              nom,
-          };
-          //On envoie le mail
-          transporter.sendMail(mailOptions, function (error, info) {
-            if (error) {
-              console.log(error);
-            } else {
-              console.log("Email sent: " + info.response);
-            }
-          });
-        }
+    db.query("UPDATE users SET nom= ? WHERE id=?", [nom, id], (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send("Values inserted");
+        //On prépare le mail de vérification
+        const mailOptions = {
+          from: process.env.GMAIL_USERNAME,
+          to: email,
+          subject: "Nom modifié",
+          text:
+            "Bonjour,\nNous confirmons la modification de votre Nom par " + nom,
+        };
+        //On envoie le mail
+        transporter.sendMail(mailOptions, function (error, info) {
+          if (error) {
+            console.log(error);
+          } else {
+            console.log("Email sent: " + info.response);
+          }
+        });
       }
-    );
+    });
   }
 };
 
@@ -164,8 +159,8 @@ module.exports.modifPseudo = (req, res) => {
     res.send("Invalid fields");
   } else {
     db.query(
-      "UPDATE users SET pseudo='" + pseudo + "' WHERE id='" + id + "'",
-      [true],
+      "UPDATE users SET pseudo=? WHERE id=?",
+      [pseudo, id],
       (err, result) => {
         if (err) {
           console.log(err);
@@ -204,8 +199,8 @@ module.exports.modifEmail = (req, res) => {
     res.send("Invalid fields");
   } else {
     db.query(
-      "UPDATE users SET email='" + nouvemail + "' WHERE id='" + id + "'",
-      [true],
+      "UPDATE users SET email=? WHERE id=?",
+      [nouvemail, id],
       (err, result) => {
         if (err) {
           console.log(err);
@@ -241,34 +236,30 @@ module.exports.modifRole = (req, res) => {
   const role = req.body.role;
   const id = req.body.id;
   const email = req.body.email;
-  db.query(
-    "UPDATE users SET role='" + role + "' WHERE id='" + id + "'",
-    [true],
-    (err, result) => {
-      if (err) {
-        console.log(err);
-      } else {
-        res.send("Values inserted");
-        //On prépare le mail de vérification
-        const mailOptions = {
-          from: process.env.GMAIL_USERNAME,
-          to: email,
-          subject: "Rôle modifié",
-          text:
-            "Bonjour,\nvous avez maintenant les privilèges associés au rôle " +
-            role,
-        };
-        //On envoie le mail
-        transporter.sendMail(mailOptions, function (error, info) {
-          if (error) {
-            console.log(error);
-          } else {
-            console.log("Email sent: " + info.response);
-          }
-        });
-      }
+  db.query("UPDATE users SET role=? WHERE id=?", [role, id], (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send("Values inserted");
+      //On prépare le mail de vérification
+      const mailOptions = {
+        from: process.env.GMAIL_USERNAME,
+        to: email,
+        subject: "Rôle modifié",
+        text:
+          "Bonjour,\nvous avez maintenant les privilèges associés au rôle " +
+          role,
+      };
+      //On envoie le mail
+      transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+          console.log(error);
+        } else {
+          console.log("Email sent: " + info.response);
+        }
+      });
     }
-  );
+  });
 };
 /* Fonction qui permets de vérifier si l'id reçu du front est bien présent dans la BD et si oui
 retourne un token qui va ensuite sur le front être stocké dans le session storage pour permettre
